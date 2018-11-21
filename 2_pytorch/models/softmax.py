@@ -1,8 +1,4 @@
-import numpy as np
-
-import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class Softmax(nn.Module):
@@ -15,14 +11,8 @@ class Softmax(nn.Module):
             n_classes (int): Number of classes to score
         '''
         super(Softmax, self).__init__()
-        #############################################################################
-        # TODO: Initialize anything you need for the forward pass
-        #############################################################################
         input_dim = im_size[0] * im_size[1] * im_size[2]
         self.fc1 = nn.Linear(input_dim, n_classes)
-        #############################################################################
-        #                             END OF YOUR CODE                              #
-        #############################################################################
 
     def forward(self, images):
         '''
@@ -40,12 +30,6 @@ class Softmax(nn.Module):
             A torch Variable of size (N, n_classes) specifying the score
             for each example and category.
         '''
-        #############################################################################
-        # TODO: Implement the forward pass. This should take very few lines of code.
-        #############################################################################
         scores = images.view(-1, images.size()[1] * images.size()[2] * images.size()[3])
         scores = self.fc1(scores)
-        #############################################################################
-        #                             END OF YOUR CODE                              #
-        #############################################################################
         return scores

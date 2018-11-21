@@ -1,21 +1,17 @@
 # NOTE: The scaffolding code for this part of the assignment
 # is adapted from https://github.com/pytorch/examples.
 from __future__ import print_function
+
 import argparse
-import numpy as np
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torchvision import transforms
-from torch.autograd import Variable
-from cifar10 import CIFAR10
 
 # You should implement these (softmax.py, twolayernn.py, convnet.py)
-import models.softmax 
-import models.twolayernn
-import models.convnet
 import models.mymodel
+import torch
+import torch.nn.functional as F
+import torch.optim as optim
+from cifar10 import CIFAR10
+from torch.autograd import Variable
+from torchvision import transforms
 
 # Training settings
 parser = argparse.ArgumentParser(description='CIFAR-10 Example')
@@ -104,14 +100,8 @@ criterion = F.cross_entropy
 if args.cuda:
     model.cuda()
 
-#############################################################################
-# TODO: Initialize an optimizer from the torch.optim package using the
-# appropriate hyperparameters found in args. This only requires one line.
-#############################################################################
 optimizer = optim.SGD(model.parameters(), lr = args.lr, momentum = args.momentum, weight_decay = args.weight_decay)
-#############################################################################
-#                             END OF YOUR CODE                              #
-#############################################################################
+
 
 def train(epoch):
     '''
@@ -127,18 +117,11 @@ def train(epoch):
         images, targets = Variable(batch[0]), Variable(batch[1])
         if args.cuda:
             images, targets = images.cuda(), targets.cuda()
-        #############################################################################
-        # TODO: Update the parameters in model using the optimizer from above.
-        # This only requires a couple lines of code.
-        #############################################################################
         optimizer.zero_grad()
         output = model(images)
         loss = criterion(output, targets)
         loss.backward()
         optimizer.step()
-        #############################################################################
-        #                             END OF YOUR CODE                              #
-        #############################################################################
         if batch_idx % args.log_interval == 0:
             val_loss, val_acc = evaluate('val', n_batches=4)
             train_loss = loss.item()
@@ -148,6 +131,7 @@ def train(epoch):
                   'Train Loss: {:.6f}\tVal Loss: {:.6f}\tVal Acc: {}'.format(
                 epoch, examples_this_epoch, len(train_loader.dataset),
                 epoch_progress, train_loss, val_loss, val_acc))
+
 
 def evaluate(split, verbose=False, n_batches=None):
     '''
@@ -193,6 +177,4 @@ evaluate('test', verbose=True)
 
 # Save the model (architecture and weights)
 torch.save(model, args.model + '.pt')
-# Later you can call torch.load(file) to re-load the trained model into python
-# See http://pytorch.org/docs/master/notes/serialization.html for more details
 
